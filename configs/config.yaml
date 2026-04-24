@@ -1,0 +1,71 @@
+# ─────────────────────────────────────────────
+# Aereo Water Body Segmentation — Config File
+# ─────────────────────────────────────────────
+
+# ── Model ─────────────────────────────────────
+model:
+  # name: "unet"                # "unet" for baseline | "unetplusplus" for main run
+  name: "unetplusplus"
+  encoder: "efficientnet-b4"  # pretrained encoder backbone
+  encoder_weights: "imagenet" # pretrained weights
+  in_channels: 3              # RGB input
+  classes: 1                  # binary segmentation
+  attention: "scse"           # only applied for unetplusplus | null for unet
+
+# ── Training ──────────────────────────────────
+train:
+  epochs: 50                  # 15 for unet baseline | 50 for unetplusplus
+  batch_size: 16              # reduce to 8 if OOM on Kaggle
+  lr: 0.001                   # Adam learning rate 
+  num_workers: 2
+  seed: 42
+  image_size: 256
+
+# ── Early Stopping ────────────────────────────
+early_stopping:
+  patience: 10                # stop if val IoU doesn't improve for 10 epochs
+  min_delta: 0.001            # minimum improvement to count as progress
+
+# ── LR Scheduler ──────────────────────────────
+scheduler:
+  name: "ReduceLROnPlateau"
+  mode: "max"                 # maximize val IoU
+  factor: 0.5                 # reduce LR by half
+  patience: 5                 # reduce after 5 epochs no improvement
+  min_lr: 0.000001            # floor for LR
+
+# ── Paths (Local) ─────────────────────────────
+paths:
+  image_dir: "C:\\Users\\RadheRadhe\\Desktop\\Self project\\CV\\Aereo\\Water Bodies Dataset\\Images"
+  mask_dir: "C:\\Users\\RadheRadhe\\Desktop\\Self project\\CV\\Aereo\\Water Bodies Dataset\\Masks"
+  valid_files: "C:\\Users\\RadheRadhe\\Desktop\\Self project\\CV\\Aereo\\data\\valid_files.txt"
+  checkpoint_dir: "C:\\Users\\RadheRadhe\\Desktop\\Self project\\CV\\Aereo\\outputs\\checkpoints"
+
+# ── Paths (Kaggle) ────────────────────────────
+# Uncomment these and comment local paths when running on Kaggle
+# paths:
+#   image_dir: "/kaggle/input/satellite-images-of-water-bodies/Water Bodies Dataset/Images"
+#   mask_dir: "/kaggle/input/satellite-images-of-water-bodies/Water Bodies Dataset/Masks"
+#   valid_files: "/kaggle/working/aereo-water-segmentation/data/valid_files.txt"
+#   checkpoint_dir: "/kaggle/working/outputs/checkpoints"
+
+# ── Checkpoint / Resume ───────────────────────
+checkpoint:
+  save_best: true             # save best_model.pth when val IoU improves
+  save_last: true             # save last_checkpoint.pth every epoch
+  resume: false               # set true to resume from last_checkpoint.pth
+  resume_path: "C:\\Users\\RadheRadhe\\Desktop\\Self project\\CV\\Aereo\\outputs\\checkpoints\\last_checkpoint.pth"
+
+# ── W&B ───────────────────────────────────────
+wandb:
+  project: "aereo-water-segmentation"
+  # run_name: "unet-baseline"   # "unet-baseline" | "unetplusplus-efficientnet-b4"
+  run_name: "unetplusplus-efficientnet-b4"
+  entity: null                # your W&B username if needed, else null
+
+# ── Debug Mode (local CPU testing) ────────────
+debug:
+  enabled: true              # set true for local error checking
+  max_samples: 50             # only load 50 images
+  epochs: 2
+  batch_size: 2

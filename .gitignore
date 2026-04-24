@@ -1,0 +1,30 @@
+# Virtual environment
+myenv/
+
+# Dataset — never push raw data
+Water Bodies Dataset/
+
+# Model weights and checkpoints
+outputs/
+eda/outputs/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# W&B local files
+wandb/
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
