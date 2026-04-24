@@ -1,12 +1,21 @@
 import os
+import sys
 import cv2
+import yaml
 import numpy as np
 from PIL import Image
 
-# ── Paths ──────────────────────────────────────────────────────────────────
-IMAGE_DIR      = r"C:\Users\RadheRadhe\Desktop\Self project\CV\Aereo\Water Bodies Dataset\Images"
-MASK_DIR       = r"C:\Users\RadheRadhe\Desktop\Self project\CV\Aereo\Water Bodies Dataset\Masks"
-OUTPUT_TXT     = r"C:\Users\RadheRadhe\Desktop\Self project\CV\Aereo\data\valid_files.txt"
+# ── Load paths from config ─────────────────────────────────────────────────
+CONFIG_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "configs", "config.yaml"
+)
+with open(CONFIG_PATH, "r") as f:
+    cfg = yaml.safe_load(f)
+
+IMAGE_DIR  = cfg["paths"]["image_dir"]
+MASK_DIR   = cfg["paths"]["mask_dir"]
+OUTPUT_TXT = cfg["paths"]["valid_files"]
 os.makedirs(os.path.dirname(OUTPUT_TXT), exist_ok=True)
 
 MIN_SIZE = 64  # filter threshold
@@ -18,7 +27,7 @@ print("=" * 55)
 
 all_files = sorted([f for f in os.listdir(IMAGE_DIR) if f.endswith('.jpg')])
 
-valid_files = []
+valid_files  = []
 dropped_files = []
 
 for f in all_files:
@@ -50,7 +59,6 @@ for f in valid_files:
         print(f"  WARNING: Could not read mask for {f}")
         continue
     unique_vals = np.unique(mask)
-    # truly binary = only 0 and/or 255
     is_binary = all(v in [0, 255] for v in unique_vals)
     if not is_binary:
         non_binary_count += 1
