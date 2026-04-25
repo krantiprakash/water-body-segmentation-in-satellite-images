@@ -4,27 +4,27 @@
 
 # ── Model ─────────────────────────────────────
 model:
-  name: "unet"                # "unet" for baseline | "unetplusplus" for main run
-  # name: "unetplusplus"
+  # name: "unet"                # "unet" for baseline | "unetplusplus" for main run
+  name: "unetplusplus"
   encoder: "efficientnet-b4"  # pretrained encoder backbone
   encoder_weights: "imagenet" # pretrained weights
   in_channels: 3              # RGB input
   classes: 1                  # binary segmentation
-  # attention: "scse"           # only applied for unetplusplus | null for unet
-  attention: null
+  attention: "scse"           # only applied for unetplusplus | null for unet
+  # attention: null
 
 # ── Training ──────────────────────────────────
 train:
-  epochs: 15                  # 15 for unet baseline | 50 for unetplusplus
+  epochs: 60                  # 15 for unet baseline | 50 for unetplusplus
   batch_size: 16              # reduce to 8 if OOM on Kaggle
-  lr: 0.001                   # Adam learning rate 
+  lr: 0.0001                   # Adam learning rate 
   num_workers: 2
   seed: 42
   image_size: 256
 
 # ── Early Stopping ────────────────────────────
 early_stopping:
-  patience: 8                # stop if val IoU doesn't improve for 10 epochs
+  patience: 12                # stop if val IoU doesn't improve for 12 epochs
   min_delta: 0.001            # minimum improvement to count as progress
 
 # ── LR Scheduler ──────────────────────────────
@@ -32,7 +32,7 @@ scheduler:
   name: "ReduceLROnPlateau"
   mode: "max"                 # maximize val IoU
   factor: 0.5                 # reduce LR by half
-  patience: 5                 # reduce after 5 epochs no improvement
+  patience: 7                 # reduce after 7 epochs no improvement
   min_lr: 0.000001            # floor for LR
 
 # ── Paths (Local) ─────────────────────────────
@@ -52,8 +52,8 @@ checkpoint:
 # ── W&B ───────────────────────────────────────
 wandb:
   project: "aereo-water-segmentation"
-  run_name: "unet-baseline"   # "unet-baseline" | "unetplusplus-efficientnet-b4"
-  # run_name: "unetplusplus-efficientnet-b4"
+  # run_name: "unet-baseline"   # "unet-baseline" | "unetplusplus-efficientnet-b4"
+  run_name: "unetplusplus-efficientnet-b4"
   entity: null                # your W&B username if needed, else null
 
 # ── Debug Mode (local CPU testing) ────────────
