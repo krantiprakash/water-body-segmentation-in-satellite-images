@@ -64,6 +64,40 @@ def build_model(cfg):
     return model
 
 
+# ── Print Model Info ───────────────────────────────────────────────────────
+def print_model_info(model, cfg, device):
+    total_params     = sum(p.numel() for p in model.parameters())
+    trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+    print("=" * 60)
+    print("MODEL INFO")
+    print("=" * 60)
+    print(f"Model            : {cfg['model']['name']}")
+    print(f"Encoder          : {cfg['model']['encoder']}")
+    print(f"Encoder weights  : {cfg['model']['encoder_weights']}")
+    print(f"Attention        : {cfg['model']['attention']}")
+    print(f"Total params     : {total_params:,}")
+    print(f"Trainable params : {trainable_params:,}")
+    print(f"Device           : {device}")
+
+    if torch.cuda.is_available():
+        print(f"GPU              : {torch.cuda.get_device_name(0)}")
+        print(f"GPU Memory alloc : {torch.cuda.memory_allocated()/1024**2:.1f} MB")
+        print(f"GPU Memory resv  : {torch.cuda.memory_reserved()/1024**2:.1f} MB")
+
+    print("=" * 60)
+    print("TRAINING CONFIG")
+    print("=" * 60)
+    print(f"Epochs           : {cfg['train']['epochs']}")
+    print(f"Batch size       : {cfg['train']['batch_size']}")
+    print(f"Learning rate    : {cfg['train']['lr']}")
+    print(f"Image size       : {cfg['train']['image_size']}")
+    print(f"Early stop pat.  : {cfg['early_stopping']['patience']}")
+    print(f"Scheduler pat.   : {cfg['scheduler']['patience']}")
+    print(f"W&B run          : {cfg['wandb']['run_name']}")
+    print("=" * 60)
+
+
 # ── Train One Epoch ────────────────────────────────────────────────────────
 def train_epoch(model, loader, criterion, optimizer, device):
     model.train()
@@ -118,22 +152,22 @@ def save_curves(history, cfg, best_iou, checkpoint_dir):
 
     fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 
-    # Loss curve — train and val on same graph
-    axes[0].plot(epochs_range, history["train_loss"], label="Train Loss",
-                 color="steelblue", linewidth=2)
-    axes[0].plot(epochs_range, history["val_loss"],   label="Val Loss",
-                 color="coral",     linewidth=2)
+    # Loss curve
+    axes[0].plot(epochs_range, history["train_loss"],
+                 label="Train Loss", color="steelblue", linewidth=2)
+    axes[0].plot(epochs_range, history["val_loss"],
+                 label="Val Loss",   color="coral",     linewidth=2)
     axes[0].set_title("Loss Curve (Train vs Val)")
     axes[0].set_xlabel("Epoch")
     axes[0].set_ylabel("Loss")
     axes[0].legend()
     axes[0].grid(True)
 
-    # IoU curve — train and val on same graph
-    axes[1].plot(epochs_range, history["train_iou"], label="Train IoU",
-                 color="steelblue", linewidth=2)
-    axes[1].plot(epochs_range, history["val_iou"],   label="Val IoU",
-                 color="coral",     linewidth=2)
+    # IoU curve
+    axes[1].plot(epochs_range, history["train_iou"],
+                 label="Train IoU", color="steelblue", linewidth=2)
+    axes[1].plot(epochs_range, history["val_iou"],
+                 label="Val IoU",   color="coral",     linewidth=2)
     axes[1].set_title("IoU Curve (Train vs Val)")
     axes[1].set_xlabel("Epoch")
     axes[1].set_ylabel("IoU")
@@ -162,14 +196,13 @@ def save_predictions(model, loader, device, cfg, checkpoint_dir, n_samples=4):
     model.eval()
     images_shown = 0
 
-    # ImageNet denormalize for display
     mean = np.array([0.485, 0.456, 0.406])
     std  = np.array([0.229, 0.224, 0.225])
 
     fig, axes = plt.subplots(n_samples, 3, figsize=(12, n_samples * 4))
-    axes[0, 0].set_title("Image",      fontsize=12)
-    axes[0, 1].set_title("True Mask",  fontsize=12)
-    axes[0, 2].set_title("Pred Mask",  fontsize=12)
+    axes[0, 0].set_title("Image",     fontsize=12)
+    axes[0, 1].set_title("True Mask", fontsize=12)
+    axes[0, 2].set_title("Pred Mask", fontsize=12)
 
     with torch.no_grad():
         for images, masks in loader:
@@ -181,7 +214,6 @@ def save_predictions(model, loader, device, cfg, checkpoint_dir, n_samples=4):
                 if images_shown >= n_samples:
                     break
 
-                # Denormalize image for display
                 img = images[i].cpu().numpy().transpose(1, 2, 0)
                 img = (img * std + mean).clip(0, 1)
 
@@ -201,7 +233,8 @@ def save_predictions(model, loader, device, cfg, checkpoint_dir, n_samples=4):
                 break
 
     plt.suptitle(
-        f"Sample Predictions — {cfg['model']['name'].upper()} | {cfg['model']['encoder']}",
+        f"Sample Predictions — {cfg['model']['name'].upper()} "
+        f"| {cfg['model']['encoder']}",
         fontsize=13
     )
     plt.tight_layout()
@@ -226,13 +259,14 @@ def main():
     # ── Debug mode overrides ──
     debug = cfg["debug"]["enabled"]
     if debug:
-        print("⚠️  DEBUG MODE ON — small dataset, CPU, 2 epochs")
+        print("DEBUG MODE ON — small dataset, CPU, 2 epochs")
         cfg["train"]["epochs"]     = cfg["debug"]["epochs"]
         cfg["train"]["batch_size"] = cfg["debug"]["batch_size"]
 
     # ── Device ──
-    device = torch.device("cuda" if torch.cuda.is_available() and not debug else "cpu")
-    print(f"Device : {device}")
+    device = torch.device(
+        "cuda" if torch.cuda.is_available() and not debug else "cpu"
+    )
 
     # ── Paths ──
     p = cfg["paths"]
@@ -251,7 +285,9 @@ def main():
 
     # ── Model ──
     model = build_model(cfg).to(device)
-    print(f"Model  : {cfg['model']['name']} | Encoder: {cfg['model']['encoder']}")
+
+    # ── Print model + config info ──
+    print_model_info(model, cfg, device)
 
     # ── Loss, Optimizer, Scheduler ──
     criterion = BCEDiceLoss()
@@ -270,7 +306,11 @@ def main():
     ckpt_cfg    = cfg["checkpoint"]
 
     if ckpt_cfg["resume"] and os.path.exists(ckpt_cfg["resume_path"]):
-        ckpt = torch.load(ckpt_cfg["resume_path"], map_location=device)
+        ckpt = torch.load(
+            ckpt_cfg["resume_path"],
+            map_location=device,
+            weights_only=False  # needs optimizer state too
+        )
         model.load_state_dict(ckpt["model_state"])
         optimizer.load_state_dict(ckpt["optimizer_state"])
         start_epoch = ckpt["epoch"] + 1
@@ -286,11 +326,13 @@ def main():
             config  = {
                 "model"              : cfg["model"]["name"],
                 "encoder"            : cfg["model"]["encoder"],
+                "attention"          : cfg["model"]["attention"],
                 "epochs"             : cfg["train"]["epochs"],
                 "batch_size"         : cfg["train"]["batch_size"],
                 "lr"                 : cfg["train"]["lr"],
                 "image_size"         : cfg["train"]["image_size"],
                 "early_stop_patience": cfg["early_stopping"]["patience"],
+                "scheduler_patience" : cfg["scheduler"]["patience"],
             }
         )
 
@@ -310,11 +352,17 @@ def main():
     print(f"Starting training for {cfg['train']['epochs']} epochs")
     print("=" * 60)
 
+    train_start = time.time()
+
     for epoch in range(start_epoch, cfg["train"]["epochs"]):
         t_start = time.time()
 
-        train_loss, train_m = train_epoch(model, train_loader, criterion, optimizer, device)
-        val_loss,   val_m   = val_epoch(model, val_loader, criterion, device)
+        train_loss, train_m = train_epoch(
+            model, train_loader, criterion, optimizer, device
+        )
+        val_loss, val_m = val_epoch(
+            model, val_loader, criterion, device
+        )
 
         scheduler.step(val_m["iou"])
         elapsed    = time.time() - t_start
@@ -357,12 +405,12 @@ def main():
 
         # ── Save best model ──
         if ckpt_cfg["save_best"] and val_m["iou"] > best_iou + es_cfg["min_delta"]:
-            best_iou = val_m["iou"]
+            best_iou  = val_m["iou"]
             best_path = os.path.join(p["checkpoint_dir"], "best_model.pth")
             torch.save(model.state_dict(), best_path)
             if not debug:
-                wandb.save(best_path)
-            print(f"  ✅ Best model saved — Val IoU: {best_iou:.4f}")
+                wandb.save(best_path, base_path=p["checkpoint_dir"])
+            print(f"Best model saved — Val IoU: {best_iou:.4f}")
 
         # ── Save last checkpoint ──
         if ckpt_cfg["save_last"]:
@@ -382,26 +430,45 @@ def main():
             es_counter += 1
             print(f"  Early stopping counter: {es_counter}/{es_cfg['patience']}")
             if es_counter >= es_cfg["patience"]:
-                print(f"  🛑 Early stopping triggered at epoch {epoch+1}")
+                print(f"Early stopping triggered at epoch {epoch+1}")
                 break
 
-    # ── Save curves and predictions ────────────────────────────────────────
+    # ── Total training time ────────────────────────────────────────────────
+    total_time = time.time() - train_start
+    print(f"\nTotal training time : {total_time/60:.1f} mins")
+
+    # ── Save curves ───────────────────────────────────────────────────────
     curve_path = save_curves(history, cfg, best_iou, p["checkpoint_dir"])
-    pred_path  = save_predictions(model, val_loader, device, cfg, p["checkpoint_dir"])
+
+    # ── Load best model before saving predictions ─────────────────────────
+    best_path = os.path.join(p["checkpoint_dir"], "best_model.pth")
+    model.load_state_dict(torch.load(
+        best_path,
+        map_location=device,
+        weights_only=True  # only state dict, safe
+    ))
+    print(f"Best model loaded for predictions → {best_path}")
+
+    # ── Save predictions ──────────────────────────────────────────────────
+    pred_path  = save_predictions(
+        model, val_loader, device, cfg, p["checkpoint_dir"]
+    )
 
     # ── Upload to W&B ──
     if not debug:
         wandb.log({
-            "training_curves"     : wandb.Image(curve_path),
-            "sample_predictions"  : wandb.Image(pred_path),
+            "training_curves"   : wandb.Image(curve_path),
+            "sample_predictions": wandb.Image(pred_path),
         })
 
     # ── Final Summary ──────────────────────────────────────────────────────
     print("=" * 60)
-    print(f"Training complete. Best Val IoU: {best_iou:.4f}")
-    print(f"Best model   → {os.path.join(p['checkpoint_dir'], 'best_model.pth')}")
-    print(f"Curves saved → {curve_path}")
-    print(f"Predictions  → {pred_path}")
+    print(f"Training complete.")
+    print(f"Best Val IoU     : {best_iou:.4f}")
+    print(f"Total time       : {total_time/60:.1f} mins")
+    print(f"Best model       → {os.path.join(p['checkpoint_dir'], 'best_model.pth')}")
+    print(f"Curves saved     → {curve_path}")
+    print(f"Predictions      → {pred_path}")
     print("=" * 60)
 
     if not debug:
