@@ -4,14 +4,14 @@
 
 # ── Model ─────────────────────────────────────
 model:
-  # name: "unet"                # "unet" for baseline | "unetplusplus" for main run
-  name: "unetplusplus"
+  name: "unet"                # "unet" for baseline | "unetplusplus" for main run
+  # name: "unetplusplus"
   encoder: "efficientnet-b4"  # pretrained encoder backbone
   encoder_weights: "imagenet" # pretrained weights
   in_channels: 3              # RGB input
   classes: 1                  # binary segmentation
-  attention: "scse"           # only applied for unetplusplus | null for unet
-  # attention: null
+  # attention: "scse"           # only applied for unetplusplus | null for unet
+  attention: null
 
 # ── Training ──────────────────────────────────
 train:
@@ -52,8 +52,8 @@ checkpoint:
 # ── W&B ───────────────────────────────────────
 wandb:
   project: "aereo-water-segmentation"
-  # run_name: "unet-baseline"   # "unet-baseline" | "unetplusplus-efficientnet-b4"
-  run_name: "unetplusplus-efficientnet-b4"
+  run_name: "unet-baseline_retrain"   # "unet-baseline" | "unetplusplus-efficientnet-b4"
+  # run_name: "unetplusplus-efficientnet-b4"
   entity: null                # your W&B username if needed, else null
 
 # ── Debug Mode (local CPU testing) ────────────
