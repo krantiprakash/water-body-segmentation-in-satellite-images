@@ -1,0 +1,56 @@
+2026-04-26 17:12:54,843 | INFO | Device       : cpu
+2026-04-26 17:12:54,843 | INFO | Model        : unetplusplus
+2026-04-26 17:12:54,843 | INFO | Loading from : C:\Users\RadheRadhe\Desktop\Self project\CV\Aereo\outputs\results_UNet++\outputs\checkpoints\best_model.pth
+2026-04-26 17:12:55,697 | INFO | Model loaded successfully. Server ready.
+2026-04-26 17:16:12,276 | INFO | Server shutting down.
+2026-04-26 17:17:37,022 | INFO | Device       : cpu
+2026-04-26 17:17:37,023 | INFO | Model        : unetplusplus
+2026-04-26 17:17:37,023 | INFO | Loading from : C:\Users\RadheRadhe\Desktop\Self project\CV\Aereo\outputs\results_UNet++\outputs\checkpoints\best_model.pth
+2026-04-26 17:17:38,198 | INFO | Model loaded successfully. Server ready.
+2026-04-26 17:19:48,952 | INFO | Server shutting down.
+2026-04-26 17:22:32,987 | INFO | Device       : cpu
+2026-04-26 17:22:32,991 | INFO | Model        : unetplusplus
+2026-04-26 17:22:32,991 | INFO | Loading from : C:\Users\RadheRadhe\Desktop\Self project\CV\Aereo\outputs\results_UNet++\outputs\checkpoints\best_model.pth
+2026-04-26 17:22:33,777 | INFO | Model loaded successfully. Server ready.
+2026-04-26 17:24:51,625 | INFO | file=water_body_8954.jpg | size=187x243 | time=1025.9ms | water=20.71%
+2026-04-26 17:33:03,485 | INFO | file=water_body_3.jpg | size=658x659 | time=575.2ms | water=18.29%
+2026-04-26 17:37:33,675 | INFO | Server shutting down.
+2026-04-26 17:39:16,959 | INFO | Device       : cpu
+2026-04-26 17:39:16,959 | INFO | Model        : unetplusplus
+2026-04-26 17:39:16,959 | INFO | Loading from : C:\Users\RadheRadhe\Desktop\Self project\CV\Aereo\outputs\results_UNet++\outputs\checkpoints\best_model.pth
+2026-04-26 17:39:18,178 | INFO | Model loaded successfully. Server ready.
+2026-04-26 17:39:55,098 | INFO | file=water_body_8882.jpg | size=185x230 | time=534.1ms | water=9.12%
+2026-04-26 17:40:50,774 | INFO | file=water_body_19.jpg | size=1881x1869 | time=531.6ms | water=38.71%
+2026-04-26 17:41:15,479 | INFO | file=water_body_19.jpg | size=1881x1869 | time=462.6ms | water=38.71%
+2026-04-26 17:45:46,484 | INFO | Server shutting down.
+2026-04-26 17:50:21,498 | INFO | Device       : cpu
+2026-04-26 17:50:21,499 | INFO | Model        : unetplusplus
+2026-04-26 17:50:21,499 | INFO | Loading from : C:\Users\RadheRadhe\Desktop\Self project\CV\Aereo\outputs\results_UNet++\outputs\checkpoints\best_model.pth
+2026-04-26 17:50:22,282 | INFO | Model loaded successfully. Server ready.
+2026-04-26 17:52:28,969 | INFO | file=water_body_688.jpg | size=173x284 | time=560.3ms | water=60.71%
+2026-04-26 17:54:30,663 | INFO | Server shutting down.
+2026-04-26 17:55:17,470 | INFO | Device       : cpu
+2026-04-26 17:55:17,472 | INFO | Model        : unetplusplus
+2026-04-26 17:55:17,472 | INFO | Loading from : C:\Users\RadheRadhe\Desktop\Self project\CV\Aereo\outputs\results_UNet++\outputs\checkpoints\best_model.pth
+2026-04-26 17:55:18,247 | INFO | Model loaded successfully. Server ready.
+2026-04-26 17:55:45,961 | INFO | file=water_body_855.jpg | size=485x775 | time=587.6ms | water=9.53%
+2026-04-26 17:56:58,726 | INFO | file=water_body_8951.jpg | size=585x765 | time=553.1ms | water=22.36%
+2026-04-26 17:57:41,527 | INFO | file=water_body_7652.jpg | size=324x328 | time=518.9ms | water=11.59%
+2026-04-26 17:58:13,771 | INFO | file=water_body_158.jpg | size=498x494 | time=468.9ms | water=16.45%
+2026-04-26 17:59:49,933 | INFO | Server shutting down.
+2026-04-26 18:02:37,740 | INFO | Device       : cpu
+2026-04-26 18:02:37,740 | INFO | Model        : unet
+2026-04-26 18:02:37,740 | INFO | Loading from : outputs\results_UNet_retrain\outputs\checkpoints\best_model.pth
+2026-04-26 18:02:39,435 | INFO | Model loaded successfully. Server ready.
+2026-04-26 18:03:57,022 | INFO | file=water_body_1279.jpg | size=155x247 | time=418.1ms | water=12.73%
+2026-04-26 18:10:28,914 | INFO | file=water_body_21.jpg | size=1900x1586 | time=240.9ms | water=47.26%
+2026-04-26 18:10:51,873 | INFO | Server shutting down.
+2026-04-26 18:11:32,134 | INFO | Device       : cpu
+2026-04-26 18:11:32,134 | INFO | Model        : unetplusplus
+2026-04-26 18:11:32,142 | INFO | Loading from : C:\Users\RadheRadhe\Desktop\Self project\CV\Aereo\outputs\results_UNet++\outputs\checkpoints\best_model.pth
+2026-04-26 18:11:33,156 | INFO | Model loaded successfully. Server ready.
+2026-04-26 18:11:47,868 | INFO | file=water_body_596.jpg | size=3156x5189 | time=614.0ms | water=100.00%
+2026-04-26 18:12:09,988 | INFO | file=water_body_21.jpg | size=1900x1586 | time=558.5ms | water=47.68%
+2026-04-26 18:12:21,008 | INFO | file=water_body_22.jpg | size=1556x1550 | time=535.1ms | water=58.31%
+2026-04-26 18:13:05,005 | INFO | file=water_body_690.jpg | size=697x1016 | time=510.5ms | water=10.93%
+2026-04-26 18:13:17,224 | INFO | Server shutting down.
