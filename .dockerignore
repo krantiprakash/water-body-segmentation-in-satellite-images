@@ -1,0 +1,37 @@
+# Virtual environment
+myenv/
+
+# Dataset — too large for Docker image
+Water Bodies Dataset/
+
+# Model checkpoints except UNet++ best model
+outputs/results_UNet/
+outputs/results_UNet_retrain/
+outputs/checkpoints/
+outputs/predictions/
+outputs/temp/
+
+# Logs
+logs/
+
+# Git
+.git/
+.gitignore
+
+# Notebooks
+notebooks/
+
+# EDA outputs
+eda/outputs/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Env files
+.env
