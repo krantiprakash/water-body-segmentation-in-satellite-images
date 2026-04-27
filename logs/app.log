@@ -74,3 +74,9 @@
 2026-04-27 19:30:55,453 | INFO | file=water_body_8321.jpg | size=248x260 | time=461.3ms | water=3.61%
 2026-04-27 19:31:11,265 | INFO | file=water_body_1760.jpg | size=480x703 | time=471.0ms | water=11.54%
 2026-04-27 19:31:30,597 | INFO | Server shutting down.
+2026-04-27 20:21:43,719 | INFO | Device       : cpu
+2026-04-27 20:21:43,720 | INFO | Model        : unetplusplus
+2026-04-27 20:21:43,720 | INFO | Loading from : outputs/results_UNet++/outputs/checkpoints/best_model.pth
+2026-04-27 20:21:44,643 | INFO | Model loaded successfully. Server ready.
+2026-04-27 20:22:00,870 | INFO | file=water_body_107.jpg | size=383x382 | time=613.2ms | water=15.30%
+2026-04-27 20:22:12,877 | INFO | Server shutting down.
