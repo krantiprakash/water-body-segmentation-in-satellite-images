@@ -54,3 +54,23 @@
 2026-04-26 18:12:21,008 | INFO | file=water_body_22.jpg | size=1556x1550 | time=535.1ms | water=58.31%
 2026-04-26 18:13:05,005 | INFO | file=water_body_690.jpg | size=697x1016 | time=510.5ms | water=10.93%
 2026-04-26 18:13:17,224 | INFO | Server shutting down.
+2026-04-27 19:20:34,716 | INFO | Device       : cpu
+2026-04-27 19:20:34,716 | INFO | Model        : unetplusplus
+2026-04-27 19:20:34,730 | INFO | Loading from : outputs\results_UNet++\outputs\checkpoints\best_model.pth
+2026-04-27 19:20:35,864 | INFO | Model loaded successfully. Server ready.
+2026-04-27 19:21:38,913 | INFO | file=water_body_8719.jpg | size=334x438 | time=670.6ms | water=9.26%
+2026-04-27 19:22:44,783 | INFO | file=water_body_8090.jpg | size=119x129 | time=483.1ms | water=29.90%
+2026-04-27 19:23:28,635 | INFO | Server shutting down.
+2026-04-27 19:27:44,250 | INFO | Device       : cpu
+2026-04-27 19:27:44,251 | INFO | Model        : unetplusplus
+2026-04-27 19:27:44,252 | INFO | Loading from : outputs\results_UNet++\outputs\checkpoints\best_model.pth
+2026-04-27 19:27:45,770 | INFO | Model loaded successfully. Server ready.
+2026-04-27 19:27:59,270 | INFO | Server shutting down.
+2026-04-27 19:30:11,167 | INFO | Device       : cpu
+2026-04-27 19:30:11,170 | INFO | Model        : unetplusplus
+2026-04-27 19:30:11,171 | INFO | Loading from : outputs/results_UNet++/outputs/checkpoints/best_model.pth
+2026-04-27 19:30:12,688 | INFO | Model loaded successfully. Server ready.
+2026-04-27 19:30:50,352 | INFO | file=water_body_8321.jpg | size=248x260 | time=829.4ms | water=3.61%
+2026-04-27 19:30:55,453 | INFO | file=water_body_8321.jpg | size=248x260 | time=461.3ms | water=3.61%
+2026-04-27 19:31:11,265 | INFO | file=water_body_1760.jpg | size=480x703 | time=471.0ms | water=11.54%
+2026-04-27 19:31:30,597 | INFO | Server shutting down.
