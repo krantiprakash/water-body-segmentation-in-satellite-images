@@ -398,14 +398,14 @@ def get_overlay(filename: str):
 
 # ── Run Server ─────────────────────────────────────────────────────────────
 if __name__ == "__main__":
-    print("\nServer starting...")
-    print("Web UI     : http://localhost:8000/")
-    print("API docs   : http://localhost:8000/docs")
-    print("Health     : http://localhost:8000/health")
+    print("\n🚀 Server starting...")
+    print("🌊 Web UI     : http://localhost:8000/")
+    print("📖 API docs   : http://localhost:8000/docs")
+    print("❤️  Health     : http://localhost:8000/health")
     print("Press CTRL+C to stop\n")
     uvicorn.run(
         "app.app:app",
-        host    = "127.0.0.1",
+        host    = "0.0.0.0",  # bind to all interfaces inside container
         port    = 8000,
         reload  = False,
         workers = 1
