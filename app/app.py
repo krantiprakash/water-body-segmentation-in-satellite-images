@@ -19,7 +19,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # ── Change these before running ────────────────────────────────────────────
 # MODEL_PATH   = r"outputs\results_UNet_retrain\outputs\checkpoints\best_model.pth"
-MODEL_PATH   = r"outputs\results_UNet++\outputs\checkpoints\best_model.pth"
+MODEL_PATH = "outputs/results_UNet++/outputs/checkpoints/best_model.pth"
 # MODEL_NAME   = "unet"   # "unet" or "unetplusplus"
 MODEL_NAME   = "unetplusplus"
 # ──────────────────────────────────────────────────────────────────────────
