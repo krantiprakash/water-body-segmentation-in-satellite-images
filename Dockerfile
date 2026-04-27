@@ -36,6 +36,11 @@ RUN pip install --no-cache-dir --timeout=300 --retries=5 \
     python-multipart==0.0.26 \
     PyYAML==6.0.3
 
+# ── Cache EfficientNet-B4 Encoder Weights ──────────────────────────────────
+# Downloads weights during build — no internet needed at runtime
+# Must run AFTER timm is installed
+RUN python -c "import timm; timm.create_model('efficientnet_b4', pretrained=True)"
+
 # ── Copy Project Code ──────────────────────────────────────────────────────
 COPY app/        ./app/
 COPY inference/  ./inference/

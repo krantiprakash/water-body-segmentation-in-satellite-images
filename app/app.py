@@ -19,7 +19,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # ── Change these before running ────────────────────────────────────────────
 # MODEL_PATH   = r"outputs\results_UNet_retrain\outputs\checkpoints\best_model.pth"
-MODEL_PATH = "outputs/results_UNet++/outputs/checkpoints/best_model.pth"
+MODEL_PATH   = r"outputs\results_UNet++\outputs\checkpoints\best_model.pth"
 # MODEL_NAME   = "unet"   # "unet" or "unetplusplus"
 MODEL_NAME   = "unetplusplus"
 # ──────────────────────────────────────────────────────────────────────────
@@ -156,6 +156,11 @@ async def lifespan(app: FastAPI):
     model = model.to(device)
     model.eval()
     logger.info("Model loaded successfully. Server ready.")
+    logger.info("--------------------------------------------------")
+    logger.info("Web UI   : http://localhost:8000/")
+    logger.info("API docs : http://localhost:8000/docs")
+    logger.info("Health   : http://localhost:8000/health")
+    logger.info("--------------------------------------------------")
     yield
     logger.info("Server shutting down.")
 
@@ -405,7 +410,6 @@ if __name__ == "__main__":
         reload  = False,
         workers = 1
     )
-
 
 
 # import os
