@@ -1,7 +1,6 @@
 # Water Body Segmentation in Satellite Imagery
 
 An end-to-end machine learning pipeline to detect and segment water bodies from satellite images using deep learning.
-
 ---
 
 ## Problem Statement
@@ -115,12 +114,6 @@ Both models use **EfficientNet-B4** as the encoder backbone with ImageNet pretra
 
 ---
 
-## Training Curves
-
-*(Add training curve images here)*
-
----
-
 ## Sample Predictions
 
 *(Add prediction visualization images here)*
@@ -175,10 +168,12 @@ docker run -p 8000:8000 krntprksh/water-segmentation:v1
 ```
 Open `http://localhost:8000/` in browser.
 
+- Inference tested and working on CPU
+
 ### Option 2 — Build locally
 ```bash
-docker build -t water-segmentation .
-docker run -p 8000:8000 water-segmentation
+docker build -t krntprksh/water-segmentation:v1 .
+docker run -p 8000:8000 krntprksh/water-segmentation:v1
 ```
 
 ---
