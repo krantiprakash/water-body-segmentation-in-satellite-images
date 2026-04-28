@@ -9,11 +9,20 @@ Given a satellite image captured by Sentinel-2, identify which pixels correspond
 
 ---
 
+## CI Status
+![CI Pipeline](https://github.com/krantiprakash/water-body-segmentation-in-satellite-images/actions/workflows/ci.yml/badge.svg)
+
+---
+
 ## Project Structure
 
 ```
-Project/
+water-body-segmentation-in-satellite-images/
+├── .github/
+│   └── workflows/
+│       └── ci.yml              # GitHub Actions CI pipeline
 ├── app/
+│   ├── __init__.py
 │   └── app.py                  # FastAPI inference web service
 ├── data/
 │   ├── dataset.py              # PyTorch Dataset, augmentations, splits
@@ -34,7 +43,6 @@ Project/
 │   └── kaggle_launcher.ipynb   # Kaggle GPU training launcher
 ├── Dockerfile                  # Container for inference service
 ├── requirements.txt            # Full dependencies
-├── requirements-docker.txt     # Lightweight CPU-only dependencies
 └── README.md
 ```
 
