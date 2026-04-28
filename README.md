@@ -235,17 +235,14 @@ model:
 | CPU-only Docker image | Uses torch+cpu — reduces image size significantly |
 | Model loaded once at startup | Avoids reloading on every request |
 | Lightweight base image | python:3.12-slim — minimal OS footprint |
-| Separate docker requirements | requirements-docker.txt excludes CUDA packages |
 
 ---
 
 ## Limitations and Future Work
 
 - Images resized to 256x256 — fine detail loss for large rasters. Patch-based tiling would improve accuracy for very large satellite images
-- Test Time Augmentation (TTA) could improve IoU by 1-2%
-- Higher resolution training (320x320 or 512x512) may yield better boundary detection
-- Cloud deployment (Railway/AWS) for public access
-
+- Higher resolution training (512x512) may yield better boundary detection
+- Cloud deployment (AWS) for public access
 ---
 
 ## Tech Stack
