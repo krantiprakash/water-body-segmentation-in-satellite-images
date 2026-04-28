@@ -1,0 +1,174 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Sanity Checks
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Cache pip packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Install PyTorch CPU
+        run: |
+          pip install --timeout=300 \
+            torch==2.11.0+cpu \
+            torchvision==0.26.0+cpu \
+            --extra-index-url https://download.pytorch.org/whl/cpu
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install --timeout=300 \
+            segmentation-models-pytorch==0.5.0 \
+            timm==1.0.26 \
+            albumentations==2.0.8 \
+            opencv-python-headless==4.13.0.92 \
+            numpy==2.4.4 \
+            pillow==12.2.0 \
+            matplotlib==3.10.9 \
+            scipy==1.17.1 \
+            fastapi==0.136.1 \
+            uvicorn==0.46.0 \
+            python-multipart==0.0.26 \
+            PyYAML==6.0.3
+
+      - name: Check core imports
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python -c '
+          import torch
+          import segmentation_models_pytorch as smp
+          import albumentations
+          import cv2
+          import numpy
+          import fastapi
+          import uvicorn
+          import yaml
+          print("All imports successful")
+          print("PyTorch version:", torch.__version__)
+          print("CUDA available:", torch.cuda.is_available())
+          '
+
+      - name: Test losses.py
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: python training/losses.py
+
+      - name: Test metrics.py
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: python training/metrics.py
+
+      - name: Test dataset.py import
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python -c '
+          from data.dataset import WaterBodyDataset, get_dataloaders
+          print("dataset.py imported successfully")
+          '
+
+      - name: Test app.py import
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python -c '
+          import app.app
+          print("app.py imported successfully")
+          '
+
+      - name: Test U-Net model build
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python -c '
+          import segmentation_models_pytorch as smp
+          model = smp.Unet(
+              encoder_name="efficientnet-b4",
+              encoder_weights=None,
+              in_channels=3,
+              classes=1,
+              activation=None
+          )
+          total = sum(p.numel() for p in model.parameters())
+          print("U-Net built successfully — params:", total)
+          '
+
+      - name: Test U-Net++ model build
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python -c '
+          import segmentation_models_pytorch as smp
+          model = smp.UnetPlusPlus(
+              encoder_name="efficientnet-b4",
+              encoder_weights=None,
+              in_channels=3,
+              classes=1,
+              activation=None,
+              decoder_attention_type="scse"
+          )
+          total = sum(p.numel() for p in model.parameters())
+          print("U-Net++ built successfully — params:", total)
+          '
+
+      - name: Test forward pass with dummy data
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: |
+          python -c '
+          import torch
+          import segmentation_models_pytorch as smp
+          from training.losses import BCEDiceLoss
+          from training.metrics import compute_metrics
+
+          model = smp.UnetPlusPlus(
+              encoder_name="efficientnet-b4",
+              encoder_weights=None,
+              in_channels=3,
+              classes=1,
+              activation=None,
+              decoder_attention_type="scse"
+          )
+          model.eval()
+
+          dummy_input  = torch.randn(1, 3, 256, 256)
+          dummy_target = torch.randint(0, 2, (1, 1, 256, 256)).float()
+
+          with torch.no_grad():
+              output = model(dummy_input)
+
+          assert output.shape == (1, 1, 256, 256), "Wrong output shape: " + str(output.shape)
+
+          criterion = BCEDiceLoss()
+          loss      = criterion(output, dummy_target)
+          metrics   = compute_metrics(output, dummy_target)
+
+          print("Forward pass successful")
+          print("Output shape:", output.shape)
+          print("Loss        :", round(loss.item(), 4))
+          print("IoU         :", round(metrics["iou"], 4))
+          print("All CI checks passed.")
+          '
