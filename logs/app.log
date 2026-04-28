@@ -102,3 +102,14 @@
 2026-04-28 01:45:47,428 | INFO | --------------------------------------------------
 2026-04-28 01:46:05,321 | INFO | file=water_body_10.jpg | size=252x253 | time=570.4ms | water=33.51%
 2026-04-28 01:46:16,450 | INFO | Server shutting down.
+2026-04-28 11:44:49,625 | INFO | Device       : cpu
+2026-04-28 11:44:49,626 | INFO | Model        : unetplusplus
+2026-04-28 11:44:49,627 | INFO | Loading from : outputs/results_UNet++/outputs/checkpoints/best_model.pth
+2026-04-28 11:44:50,542 | INFO | Model loaded successfully. Server ready.
+2026-04-28 11:44:50,543 | INFO | --------------------------------------------------
+2026-04-28 11:44:50,543 | INFO | Web UI   : http://localhost:8000/
+2026-04-28 11:44:50,543 | INFO | API docs : http://localhost:8000/docs
+2026-04-28 11:44:50,544 | INFO | Health   : http://localhost:8000/health
+2026-04-28 11:44:50,544 | INFO | --------------------------------------------------
+2026-04-28 11:47:08,806 | INFO | file=water_body_690.jpg | size=697x1016 | time=1307.3ms | water=10.93%
+2026-04-28 12:24:36,970 | INFO | Server shutting down.

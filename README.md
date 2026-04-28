@@ -12,7 +12,7 @@ Given a satellite image captured by Sentinel-2, identify which pixels correspond
 ## Project Structure
 
 ```
-aereo-water-segmentation/
+Project/
 ├── app/
 │   └── app.py                  # FastAPI inference web service
 ├── data/
@@ -116,7 +116,7 @@ Both models use **EfficientNet-B4** as the encoder backbone with ImageNet pretra
 
 ## Sample Predictions
 
-*(Add prediction visualization images here)*
+![alt text](water_body_51_result-1.png)
 
 ---
 
