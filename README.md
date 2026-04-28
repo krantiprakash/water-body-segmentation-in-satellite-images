@@ -140,7 +140,7 @@ source myenv/bin/activate       # Linux/Mac
 pip install -r requirements.txt
 ```
 
-### 4. Run preprocessing
+### 4. Run preprocessing (Only if you wants to retrain the model from scratch)
 ```bash
 python data/preprocess.py
 ```
