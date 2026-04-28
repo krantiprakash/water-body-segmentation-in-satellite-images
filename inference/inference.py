@@ -17,7 +17,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 MODEL_PATH   = r"outputs\results_UNet++\outputs\checkpoints\best_model.pth"
 # MODEL_NAME   = "unet"   # "unet" or "unetplusplus"
 MODEL_NAME   = "unetplusplus"
-INPUT_IMAGE  = r"Water Bodies Dataset\Images\water_body_51.jpg"
+INPUT_IMAGE  = r"Water Bodies Dataset\Images\water_body_896.jpg"
 OUTPUT_DIR   = r"C:\Users\RadheRadhe\Desktop\Self project\CV\Aereo\outputs\predictions"
 # ──────────────────────────────────────────────────────────────────────────
 

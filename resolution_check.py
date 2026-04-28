@@ -1,68 +1,93 @@
 import os
 from PIL import Image
 
-# Define paths
+# ── Paths ──────────────────────────────────────────────────────────────────
 image_dir = r"C:\Users\RadheRadhe\Desktop\Self project\CV\Aereo\Water Bodies Dataset\Images"
-mask_dir = r"C:\Users\RadheRadhe\Desktop\Self project\CV\Aereo\Water Bodies Dataset\Masks"
+mask_dir  = r"C:\Users\RadheRadhe\Desktop\Self project\CV\Aereo\Water Bodies Dataset\Masks"
 
-# Get list of image files
-image_files = [f for f in os.listdir(image_dir) if f.endswith('.jpg')]
-mask_files = [f for f in os.listdir(mask_dir) if f.endswith('.jpg')]
+# ── Load all image files ───────────────────────────────────────────────────
+image_files = sorted([f for f in os.listdir(image_dir) if f.endswith('.jpg')])
+mask_files  = sorted([f for f in os.listdir(mask_dir)  if f.endswith('.jpg')])
 
-# Count images
-num_images = len(image_files)
-print(f"Number of images: {num_images}")
+print(f"Total images : {len(image_files)}")
+print(f"Total masks  : {len(mask_files)}")
 
-# Check for corresponding masks
-missing_masks = []
-for img_file in image_files:
-    if img_file not in mask_files:
-        missing_masks.append(img_file)
-
+# ── Check missing masks ────────────────────────────────────────────────────
+missing_masks = [f for f in image_files if f not in set(mask_files)]
 if missing_masks:
-    print(f"Images without corresponding masks: {missing_masks}")
+    print(f"Images without masks: {missing_masks}")
 else:
     print("All images have corresponding masks.")
 
-# Check resolutions and match
+# ── Build resolution dict ──────────────────────────────────────────────────
 image_resolutions = {}
-mask_resolutions = {}
-mismatched_resolutions = []
-small_images_count = 0
-
 for img_file in image_files:
-    img_path = os.path.join(image_dir, img_file)
-    mask_path = os.path.join(mask_dir, img_file)
-    try:
-        with Image.open(img_path) as img:
-            img_res = img.size  # (width, height)
-            image_resolutions[img_file] = img_res
-            if img_res[0] < 64 or img_res[1] < 64:
-                small_images_count += 1
-        with Image.open(mask_path) as mask:
-            mask_res = mask.size
-            mask_resolutions[img_file] = mask_res
-        if img_res != mask_res:
-            mismatched_resolutions.append((img_file, img_res, mask_res))
-    except Exception as e:
-        print(f"Error reading {img_file}: {e}")
+    with Image.open(os.path.join(image_dir, img_file)) as img:
+        image_resolutions[img_file] = img.size  # (width, height)
 
-print(f"Number of images smaller than 64x64: {small_images_count}")
+# ── FULL DATASET (all 2841 images) ────────────────────────────────────────
+print("\n" + "=" * 55)
+print("FULL DATASET (all 2841 images)")
+print("=" * 55)
 
-print(f"Total images checked: {len(image_resolutions)}")
-print(f"Total masks checked: {len(mask_resolutions)}")
+# Smallest image by min(width, height)
+min_img  = min(image_resolutions, key=lambda f: min(image_resolutions[f]))
+min_res  = image_resolutions[min_img]
 
-if mismatched_resolutions:
-    print("Images with mismatched resolutions (image vs mask):")
-    for img, img_res, mask_res in mismatched_resolutions:
-        print(f"  {img}: Image {img_res}, Mask {mask_res}")
-else:
-    print("All images and masks have matching resolutions.")
+# Largest image by max(width, height)
+max_img  = max(image_resolutions, key=lambda f: max(image_resolutions[f]))
+max_res  = image_resolutions[max_img]
 
-# Unique image resolutions
-unique_image_res = set(image_resolutions.values())
-print(f"Unique image resolutions: {sorted(unique_image_res)}")
+# Smallest image by area (width * height)
+min_area_img = min(image_resolutions, key=lambda f: image_resolutions[f][0] * image_resolutions[f][1])
+min_area_res = image_resolutions[min_area_img]
 
-# Unique mask resolutions
-unique_mask_res = set(mask_resolutions.values())
-print(f"Unique mask resolutions: {sorted(unique_mask_res)}")
+# Largest image by area
+max_area_img = max(image_resolutions, key=lambda f: image_resolutions[f][0] * image_resolutions[f][1])
+max_area_res = image_resolutions[max_area_img]
+
+print(f"Smallest (min side)  : {min_img} → {min_res[0]}x{min_res[1]}")
+print(f"Largest  (max side)  : {max_img} → {max_res[0]}x{max_res[1]}")
+print(f"Smallest (by area)   : {min_area_img} → {min_area_res[0]}x{min_area_res[1]}")
+print(f"Largest  (by area)   : {max_area_img} → {max_area_res[0]}x{max_area_res[1]}")
+
+# ── FILTERED DATASET (after removing images < 64px) ───────────────────────
+print("\n" + "=" * 55)
+print("FILTERED DATASET (after removing < 64px images)")
+print("=" * 55)
+
+filtered = {f: r for f, r in image_resolutions.items()
+            if r[0] >= 64 and r[1] >= 64}
+dropped  = {f: r for f, r in image_resolutions.items()
+            if r[0] < 64 or r[1] < 64}
+
+print(f"Total after filter   : {len(filtered)}")
+print(f"Dropped (< 64px)     : {len(dropped)}")
+
+# Smallest in filtered dataset
+min_filt_img = min(filtered, key=lambda f: min(filtered[f]))
+min_filt_res = filtered[min_filt_img]
+
+# Largest in filtered dataset
+max_filt_img = max(filtered, key=lambda f: max(filtered[f]))
+max_filt_res = filtered[max_filt_img]
+
+# Smallest by area in filtered
+min_filt_area_img = min(filtered, key=lambda f: filtered[f][0] * filtered[f][1])
+min_filt_area_res = filtered[min_filt_area_img]
+
+# Largest by area in filtered
+max_filt_area_img = max(filtered, key=lambda f: filtered[f][0] * filtered[f][1])
+max_filt_area_res = filtered[max_filt_area_img]
+
+print(f"\nSmallest (min side)  : {min_filt_img} → {min_filt_res[0]}x{min_filt_res[1]}")
+print(f"Largest  (max side)  : {max_filt_img} → {max_filt_res[0]}x{max_filt_res[1]}")
+print(f"Smallest (by area)   : {min_filt_area_img} → {min_filt_area_res[0]}x{min_filt_area_res[1]}")
+print(f"Largest  (by area)   : {max_filt_area_img} → {max_filt_area_res[0]}x{max_filt_area_res[1]}")
+
+# ── DROPPED IMAGES LIST ────────────────────────────────────────────────────
+print("\n" + "=" * 55)
+print("DROPPED IMAGES (< 64px in any dimension)")
+print("=" * 55)
+for f, r in sorted(dropped.items(), key=lambda x: min(x[1])):
+    print(f"  {f} → {r[0]}x{r[1]}")
